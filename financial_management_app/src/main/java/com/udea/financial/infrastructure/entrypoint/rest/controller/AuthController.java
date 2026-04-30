@@ -45,7 +45,7 @@ public class AuthController {
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         log.info("Login attempt for email: {}", request.getEmail());
         User user = authUseCase.login(request.getEmail(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getEmail());
+        String token = jwtProvider.generateToken(user.getEmail(), user.getIdUser());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 }
