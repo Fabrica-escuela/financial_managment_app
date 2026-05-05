@@ -39,7 +39,7 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw -B clean verify sonar:sonar \
-            -Dsonar.projectKey=financial_managment_app \
+            -Dsonar.projectKey=Fabrica-escuela_financial_managment_app \
             -Dsonar.organization=fabrica-escuela \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dspring.profiles.active=test
