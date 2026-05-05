@@ -5,8 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- Bajamos a la versión 3.4.x o 3.3.x ya que la 4.0 todavía no es estable/estándar en 2026 -->
-        <version>3.4.1</version>
+        <version>3.4.3</version>
         <relativePath/>
     </parent>
     <groupId>com.udea.financial</groupId>
