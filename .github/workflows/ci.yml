@@ -26,7 +26,7 @@ jobs:
       - name: Build and test
         run: |
           chmod +x mvnw
-          ./mvnw clean verify -Dspring.profiles.active=test
+          ./mvnw clean verify -U -Dspring.profiles.active=test
 
       - name: Upload test results
         if: always()
