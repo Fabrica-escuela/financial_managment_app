@@ -5,20 +5,24 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- Actualizado a la versión estable más reciente para Java 21 -->
         <version>3.4.3</version>
         <relativePath/>
     </parent>
+
     <groupId>com.udea.financial</groupId>
     <artifactId>financial_managment_app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>financial_management_app</name>
-    <description>Financial Management System</description>
+    <name>financial_managment_app</name>
+    <description>Financial Managment System</description>
 
     <properties>
         <java.version>21</java.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok.version>1.18.36</lombok.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <!-- Forzamos la versión de seguridad requerida por Trivy para 2026 -->
+        <spring-security.version>6.5.9</spring-security.version>
     </properties>
 
     <dependencies>
@@ -36,10 +40,21 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- SECURITY -->
+        <!-- SECURITY (CON PARCHES DE VULNERABILIDAD) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- Forzamos los módulos específicos para corregir CVE-2025-41232 y CVE-2026-22732 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mindrot</groupId>
@@ -95,7 +110,7 @@
             <version>2.8.1</version>
         </dependency>
 
-        <!-- TEST (CORREGIDO) -->
+        <!-- TEST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
