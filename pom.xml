@@ -22,6 +22,7 @@
         <lombok.version>1.18.36</lombok.version>
         <jjwt.version>0.12.6</jjwt.version>
         <spring-security.version>6.5.9</spring-security.version>
+        <tomcat.version>10.1.53</tomcat.version>
         <!-- SonarCloud Properties de la rama main -->
         <sonar.projectKey>fabrica-escuela</sonar.projectKey>
         <sonar.organization>fabrica-escuela</sonar.organization>
