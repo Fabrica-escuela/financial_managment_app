@@ -28,7 +28,9 @@ public class AuthUseCase {
         }
 
         if (!passwordEncryptor.matches(password, user.getPassword())) {
+            // Esta línea ahora puede lanzar AccountLockedException si es el 5to fallo
             handleFailedAttempt(user);
+            // Si no fue el 5to fallo, lanzamos la excepción normal de credenciales
             throw new InvalidCredentialsException(ExceptionMessages.INVALID_CREDENTIALS);
         }
 
@@ -43,6 +45,7 @@ public class AuthUseCase {
         if (user.getLockTime().plusMinutes(LOCK_DURATION_MINUTES).isAfter(LocalDateTime.now())) {
             return true;
         }
+        // Si el tiempo de bloqueo ya pasó, reseteamos y permitimos el acceso
         resetFailedAttempts(user);
         return false;
     }
@@ -50,9 +53,13 @@ public class AuthUseCase {
     private void handleFailedAttempt(User user) {
         int newAttempts = user.getFailedLoginAttempts() + 1;
         user.setFailedLoginAttempts(newAttempts);
+
         if (newAttempts >= MAX_FAILED_ATTEMPTS) {
             user.setLockTime(LocalDateTime.now());
+            userRepository.update(user); // Guardamos el bloqueo en DB
+            throw new AccountLockedException(ExceptionMessages.ACCOUNT_LOCKED);
         }
+
         userRepository.update(user);
     }
 

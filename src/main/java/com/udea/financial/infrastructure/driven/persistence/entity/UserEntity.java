@@ -33,13 +33,15 @@ public class UserEntity {
     private LocalDateTime registrationDate;
 
     @Column(nullable = false)
-    private int failedLoginAttempts;
+    @Builder.Default
+    private int failedLoginAttempts = 0;
 
     private LocalDateTime lockTime;
 
     @PrePersist
     protected void onCreate() {
-        this.registrationDate = LocalDateTime.now();
-        this.failedLoginAttempts = 0;
+        if (this.registrationDate == null) {
+            this.registrationDate = LocalDateTime.now();
+        }
     }
 }
