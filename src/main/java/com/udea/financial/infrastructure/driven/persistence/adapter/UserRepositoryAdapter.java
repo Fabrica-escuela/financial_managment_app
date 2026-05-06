@@ -19,12 +19,15 @@ public class UserRepositoryAdapter implements IUserRepository {
 
     @Override
     public void save(User user) {
-        userRepository.save(userMapper.toEntity(user));
+        // Usamos saveAndFlush para asegurar que los tests de integración
+        // vean los cambios inmediatamente.
+        userRepository.saveAndFlush(userMapper.toEntity(user));
     }
 
     @Override
     public void update(User user) {
-        userRepository.save(userMapper.toEntity(user));
+        // En JPA, saveAndFlush actualiza si el Entity tiene un ID válido.
+        userRepository.saveAndFlush(userMapper.toEntity(user));
     }
 
     @Override
