@@ -117,7 +117,7 @@ jobs:
         env:
           GITHUB_TOKEN: `${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: `${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$ProjectKey -Dsonar.organization=`${{ secrets.SONAR_ORG }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$ProjectKey -Dsonar.organization=$Organization
 
       - name: Upload test results
         if: failure()
