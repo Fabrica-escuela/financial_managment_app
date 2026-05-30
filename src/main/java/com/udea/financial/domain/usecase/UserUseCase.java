@@ -17,6 +17,7 @@ public class UserUseCase {
     private final IPasswordEncryptor passwordEncryptor;
 
     public void saveUser(User user) {
+        user.setEmail(user.getEmail().toLowerCase());
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new DuplicateEmailException(ExceptionMessages.DUPLICATE_EMAIL);
         }
@@ -25,7 +26,7 @@ public class UserUseCase {
     }
 
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException(ExceptionMessages.USER_NOT_FOUND_BY_EMAIL + email));
     }
 
