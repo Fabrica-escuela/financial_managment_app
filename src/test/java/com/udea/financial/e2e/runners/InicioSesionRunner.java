@@ -8,7 +8,7 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 // Apuntamos al nuevo nombre exacto del archivo que corregiste
-@SelectClasspathResource("/features/auth.feature")
+@SelectClasspathResource("features/auth.feature")
 @ConfigurationParameter(
         key = "cucumber.plugin",
         value = "pretty, io.cucumber.core.plugin.SerenityReporter"

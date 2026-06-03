@@ -7,7 +7,7 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("/features/categorias.feature")
+@SelectClasspathResource("features/categorias.feature")
 @ConfigurationParameter(
         key = "cucumber.plugin",
         value = "pretty, io.cucumber.core.plugin.SerenityReporter"
