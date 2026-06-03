@@ -1,5 +1,5 @@
 @HU-03 @GestionGastos
-Feature: HU-03 Gestión y Reporte de Gastos
+Feature: HU-04 Gestión y Reporte de Gastos
   Como usuario autenticado en el sistema
   Quiero registrar mis transacciones de egresos
   Para visualizar el resumen de mis movimientos financieros
