@@ -22,3 +22,13 @@ Feature: HU-07 Balance Financiero
     Given que el usuario consulta su balance antes de un nuevo movimiento
     When consulta nuevamente su balance financiero del mes actual
     Then el saldo neto refleja la situación financiera actualizada
+
+  @EscenarioFallido @BalanceSinAutenticacion
+  Scenario: Intento de consultar balance sin token de autenticación
+    When consulta su balance financiero sin enviar token de autenticación
+    Then el sistema deniega la consulta del balance por falta de autenticación
+
+  @EscenarioFallido @BalanceTokenInvalido
+  Scenario: Intento de consultar balance con token malformado
+    When consulta su balance financiero con un token inválido o expirado
+    Then el sistema rechaza la consulta del balance por credencial inválida

@@ -23,3 +23,21 @@ Feature: HU-06 Presupuestos Mensuales
   Scenario: Notificación de presupuesto agotado al consultar el estado
     When consulta el estado de todos sus presupuestos del mes
     Then el sistema muestra el estado actualizado de cada presupuesto
+
+  @EscenarioFallido @PresupuestoCategoriaInexistente
+  Scenario: Intento de crear presupuesto para una categoría que no existe
+    Given que el usuario referencia una categoría inexistente con id 999999
+    When intenta asignar un presupuesto de 200000.0 a esa categoría inexistente
+    Then el sistema rechaza el presupuesto indicando que la categoría no fue encontrada
+
+  @EscenarioFallido @PresupuestoMontoInvalido
+  Scenario: Intento de crear presupuesto con monto igual a cero
+    Given que el usuario tiene disponible la categoría con id 1
+    When intenta asignar un presupuesto con monto inválido de 0.0 a esa categoría
+    Then el sistema rechaza el presupuesto por monto no permitido
+
+  @EscenarioFallido @PresupuestoSinAutenticacion
+  Scenario: Intento de crear presupuesto sin token de autenticación
+    Given que el usuario tiene disponible la categoría con id 1
+    When intenta crear un presupuesto de 300000.0 sin enviar token de autenticación
+    Then el sistema deniega el acceso por falta de autenticación

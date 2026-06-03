@@ -23,3 +23,18 @@ Feature: HU-05 Clasificación por Categorías
     Given que ya existe la categoría "Alimentacion" de tipo "EXPENSE" para el usuario
     When intenta crear nuevamente la categoría "Alimentacion" de tipo "EXPENSE"
     Then el sistema advierte sobre la existencia previa y evita el duplicado
+
+  @EscenarioFallido @NombreCategoriaVacio
+  Scenario: Intento de crear categoría con nombre vacío
+    When intenta crear una categoría con nombre vacío y tipo "EXPENSE"
+    Then el sistema rechaza la categoría por nombre no válido
+
+  @EscenarioFallido @TipoCategoriaInvalido
+  Scenario: Intento de crear categoría con tipo no permitido
+    When intenta crear una categoría con nombre "Viajes" y tipo inválido "INVALIDO"
+    Then el sistema rechaza la categoría indicando que el tipo no es reconocido
+
+  @EscenarioFallido @CategoriaSinAutenticacion
+  Scenario: Intento de crear categoría sin token de autenticación
+    When intenta crear una categoría con nombre "SinToken" y tipo "INCOME" sin autenticación
+    Then el sistema deniega la operación de categoría por falta de autenticación

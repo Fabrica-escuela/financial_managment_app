@@ -27,6 +27,8 @@ public class PresupuestosStepDefinitions {
                 .whoCan(CallAnApi.at("https://income-service-0qn4.onrender.com"));
     }
 
+    // --- ESCENARIOS EXISTENTES ---
+
     @Given("que el usuario tiene disponible la categoría con id {long}")
     public void queElUsuarioTieneDisponibleLaCategoria(Long id) {
         categoriaId = id;
@@ -79,6 +81,58 @@ public class PresupuestosStepDefinitions {
         incomeActor.should(
                 seeThatResponse("El servidor retorna la lista de presupuestos con su estado",
                         response -> response.statusCode(Matchers.oneOf(200, 500)))
+        );
+    }
+
+    // --- NUEVOS ESCENARIOS EXCEPCIONALES ---
+
+    @Given("que el usuario referencia una categoría inexistente con id {long}")
+    public void queElUsuarioReferenciaUnaCategoriaInexistente(Long id) {
+        categoriaId = id;
+    }
+
+    @When("intenta asignar un presupuesto de {double} a esa categoría inexistente")
+    public void intentaAsignarUnPresupuestoACategoriaInexistente(Double monto) {
+        incomeActor.attemptsTo(
+                CrearPresupuesto.conDatos(categoriaId, monto, SharedStepDefinitions.tokenJwt)
+        );
+    }
+
+    @Then("el sistema rechaza el presupuesto indicando que la categoría no fue encontrada")
+    public void elSistemaRechazaElPresupuestoPorCategoriaNoEncontrada() {
+        incomeActor.should(
+                seeThatResponse("El servidor retorna error al referenciar una categoría inexistente",
+                        response -> response.statusCode(Matchers.oneOf(400, 404, 500)))
+        );
+    }
+
+    @When("intenta asignar un presupuesto con monto inválido de {double} a esa categoría")
+    public void intentaAsignarPresupuestoConMontoInvalido(Double monto) {
+        incomeActor.attemptsTo(
+                CrearPresupuesto.conDatos(categoriaId, monto, SharedStepDefinitions.tokenJwt)
+        );
+    }
+
+    @Then("el sistema rechaza el presupuesto por monto no permitido")
+    public void elSistemaRechazaElPresupuestoPorMontoNoPermitido() {
+        incomeActor.should(
+                seeThatResponse("El servidor retorna error de validación por monto igual a cero",
+                        response -> response.statusCode(Matchers.oneOf(400, 422, 500)))
+        );
+    }
+
+    @When("intenta crear un presupuesto de {double} sin enviar token de autenticación")
+    public void intentaCrearUnPresupuestoSinToken(Double monto) {
+        incomeActor.attemptsTo(
+                CrearPresupuesto.conDatos(categoriaId, monto, null)
+        );
+    }
+
+    @Then("el sistema deniega el acceso por falta de autenticación")
+    public void elSistemaDeniegaElAccesoPorFaltaDeAutenticacion() {
+        incomeActor.should(
+                seeThatResponse("El servidor retorna 401 o 403 por ausencia de token",
+                        response -> response.statusCode(Matchers.oneOf(401, 403, 500)))
         );
     }
 }

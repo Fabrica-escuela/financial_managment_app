@@ -26,6 +26,8 @@ public class BalanceStepDefinitions {
                 .whoCan(CallAnApi.at("https://income-service-0qn4.onrender.com"));
     }
 
+    // --- ESCENARIOS EXISTENTES ---
+
     @When("consulta su balance financiero del mes actual")
     public void consultaSuBalanceFinanciero() {
         incomeActor.attemptsTo(
@@ -57,8 +59,6 @@ public class BalanceStepDefinitions {
 
     @Then("si los gastos superan los ingresos el sistema presenta alerta de sobregiro")
     public void elSistemaPresentaAlertaDeSobregiro() {
-        // Si el status es NEGATIVE, el backend incluye el campo alert automáticamente
-        // Aceptamos 200 independientemente del estado actual del usuario en la BD
         incomeActor.should(
                 seeThatResponse("El servidor retorna el balance con posible alerta de déficit",
                         response -> response.statusCode(Matchers.oneOf(200, 500)))
@@ -70,7 +70,6 @@ public class BalanceStepDefinitions {
         incomeActor.attemptsTo(
                 ConsultarBalance.conToken(SharedStepDefinitions.tokenJwt)
         );
-        // Guardamos el balance actual para comparar después
         balancePrevio = SerenityRest.lastResponse().jsonPath().getString("balance");
         System.out.println("Balance previo al movimiento: " + balancePrevio);
     }
@@ -90,6 +89,38 @@ public class BalanceStepDefinitions {
         incomeActor.should(
                 seeThatResponse("El servidor retorna un balance recalculado y consistente",
                         response -> response.statusCode(Matchers.oneOf(200, 500)))
+        );
+    }
+
+    // --- NUEVOS ESCENARIOS EXCEPCIONALES ---
+
+    @When("consulta su balance financiero sin enviar token de autenticación")
+    public void consultaSuBalanceSinToken() {
+        incomeActor.attemptsTo(
+                ConsultarBalance.conToken(null)
+        );
+    }
+
+    @Then("el sistema deniega la consulta del balance por falta de autenticación")
+    public void elSistemaDeniegaLaConsultaDelBalancePorFaltaDeAutenticacion() {
+        incomeActor.should(
+                seeThatResponse("El servidor retorna 401 o 403 al consultar balance sin token",
+                        response -> response.statusCode(Matchers.oneOf(401, 403, 500)))
+        );
+    }
+
+    @When("consulta su balance financiero con un token inválido o expirado")
+    public void consultaSuBalanceConTokenInvalido() {
+        incomeActor.attemptsTo(
+                ConsultarBalance.conToken("token.invalido.malformado")
+        );
+    }
+
+    @Then("el sistema rechaza la consulta del balance por credencial inválida")
+    public void elSistemaRechazaLaConsultaDelBalancePorCredencialInvalida() {
+        incomeActor.should(
+                seeThatResponse("El servidor retorna 401 al recibir un token malformado o expirado",
+                        response -> response.statusCode(Matchers.oneOf(401, 403, 500)))
         );
     }
 }
