@@ -39,12 +39,11 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw -B clean verify sonar:sonar \
-            -Dspring.profiles.active=test \
             -Dsonar.projectKey=Fabrica-escuela_financial_managment_app \
             -Dsonar.organization=fabrica-escuela \
-            -DskipTests \
-            -Dmaven.test.skip=true \
-            -Dfailsafe.skip=true
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dspring.profiles.active=test
+            -DskipTests
 
       - name: Upload test results
         if: always()
