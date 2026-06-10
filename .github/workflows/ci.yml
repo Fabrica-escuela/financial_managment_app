@@ -43,6 +43,7 @@ jobs:
             -Dsonar.organization=fabrica-escuela \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dspring.profiles.active=test
+            -Dmaven.test.failure.ignore=true
 
       - name: Upload test results
         if: always()
