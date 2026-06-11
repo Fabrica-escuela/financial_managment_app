@@ -33,10 +33,6 @@ public class HU01StepDefinitions {
         // No se hace ninguna acción, es una precondición del ambiente
     }
 
-    /**
-     * Step dinámico: genera nombre y correo únicos en cada ejecución
-     * para que el escenario exitoso nunca falle por duplicado.
-     */
     @When("me registro con un nombre y correo únicos generados automáticamente y contraseña {string}")
     public void meRegistroConDatosUnicos(String password) {
         String correoUnico = generarCorreoUnico();
