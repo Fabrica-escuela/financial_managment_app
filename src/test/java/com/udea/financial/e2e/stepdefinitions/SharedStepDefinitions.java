@@ -8,6 +8,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  * Steps compartidos entre todas las suites E2E.
@@ -25,6 +26,18 @@ public class SharedStepDefinitions {
 
     @Before
     public void setTheStage() {
+        boolean runE2E = Boolean.parseBoolean(
+            System.getProperty(
+                "runE2E",
+                System.getenv().getOrDefault("RUN_E2E_TESTS", "false")
+            )
+        );
+
+        Assumptions.assumeTrue(
+            runE2E,
+            "E2E tests are disabled by default in CI. Enable them with -DrunE2E=true or RUN_E2E_TESTS=true."
+        );
+
         OnStage.setTheStage(new OnlineCast());
         sharedActor = Actor.named("User")
                 .whoCan(CallAnApi.at("https://financial-managment-app.onrender.com"));
